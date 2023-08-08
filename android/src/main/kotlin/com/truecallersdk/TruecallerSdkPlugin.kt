@@ -114,14 +114,14 @@ public class TruecallerSdkPlugin : FlutterPlugin, MethodCallHandler, EventChanne
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         when (call.method) {
             INITIATE_SDK -> {
-                getTrueScope(call)?.let { 
-                    try {
+                try {
+                    getTrueScope(call)?.let { 
                         TruecallerSDK.init(it);
                         result.success("OK") 
-                    } catch (ex: Exception) {
-                        result.error("UNAVAILABLE", ex.message ?: "Activity not available.", null)
-                    }
-                } ?: result.error("UNAVAILABLE", "Activity not available.", null)
+                    } ?: result.error("UNAVAILABLE", "Activity not available.", null)
+                } catch (ex: Exception) {
+                    result.error("UNAVAILABLE", ex.message ?: "Activity not available.", null)
+                }
             }
             IS_USABLE -> {
                 result.success(TruecallerSDK.getInstance() != null && TruecallerSDK.getInstance().isUsable)
